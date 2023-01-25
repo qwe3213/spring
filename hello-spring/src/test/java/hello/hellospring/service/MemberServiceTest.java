@@ -4,18 +4,28 @@ import hello.hellospring.domain.Member;
 import hello.hellospring.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 class MemberServiceTest {
+    MemberService memberService;
+    MemoryMemberRepository memberRepository;
 
-       MemberService memberService = new MemberService();
-      MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+    @BeforeEach
+    public void beforeEach(){
+        memberRepository = new MemoryMemberRepository();
+        memberService=new MemberService(memberRepository);
+    }
+    // 밑의 방법처럼 하면 memberService의 memberRepository와 테스트에서의 memberRepository가 다르기 때문에 같게 하려면 위의 방식처럼 해야함.
+      //MemberService memberService = new MemberService();
+     // MemoryMemberRepository memberRepository = new MemoryMemberRepository(); // MemverService에서 의MemoryMemberRepository와
+     //테스트에서의 MemoryMemberRepository는 다른 것 이지만 private static Map<Long, Member> store = new HashMap<>(); 부분의 static 이없으면 다른 DB가되어 문제 발생.
     @AfterEach
     public void afterEach(){
         memberRepository.clearStore();
-    } // 돌떄마다 DB의 값을 날려줌
+    } // 돌떄마다 DB의 값을 날려
 
     @Test
     void 회원가입() {
